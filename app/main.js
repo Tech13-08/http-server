@@ -42,6 +42,7 @@ const server = net.createServer((socket) => {
           const validCompressions = acceptedCompressions.filter((element) =>
             compressionArray.includes(element)
           );
+          console.log(validCompressions);
           const compression =
             validCompressions.length > 0 ? validCompressions[0] : "";
           if (pathData[0].length > 0) {
