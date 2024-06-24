@@ -1,4 +1,14 @@
 const net = require("net");
+const fs = require("fs");
+const dirIndex = process.argv.indexOf("--directory");
+let dirValue;
+
+if (dirIndex > -1) {
+  // Retrieve the value after --custom
+  dirValue = process.argv[dirIndex + 1];
+}
+
+const directory = dirValue || "";
 
 // Uncomment this to pass the first stage
 const server = net.createServer((socket) => {
@@ -45,6 +55,23 @@ const server = net.createServer((socket) => {
                     "\r\n\r\n" +
                     userAgent
                 );
+                break;
+              case "files":
+                if (fs.existsSync(directory + pathData[1])) {
+                  const fileContent = fs.readFileSync(
+                    directory + pathData[1],
+                    "utf-8"
+                  );
+                  console.log(fileContent);
+                  socket.write(
+                    "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:" +
+                      fileContent.length +
+                      "\r\n\r\n" +
+                      fileContent
+                  );
+                } else {
+                  socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+                }
                 break;
               default:
                 socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
