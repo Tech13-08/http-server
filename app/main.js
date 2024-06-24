@@ -80,6 +80,31 @@ const server = net.createServer((socket) => {
             socket.write("HTTP/1.1 200 OK\r\n\r\n");
           }
           break;
+
+        case "POST":
+          if (pathData[0].length > 0) {
+            switch (pathData[0]) {
+              case "files":
+                if (!fs.existsSync(directory + pathData[1])) {
+                  const fileContent =
+                    request[
+                      request.findIndex((element) =>
+                        element.includes("Content-Type")
+                      ) + 3
+                    ];
+                  fs.writeFileSync(directory + pathData[1], fileContent);
+                  socket.write("HTTP/1.1 201 Created\r\n\r\n");
+                } else {
+                  socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+                }
+                break;
+              default:
+                socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+            }
+          } else {
+            socket.write("HTTP/1.1 200 OK\r\n\r\n");
+          }
+          break;
       }
     }
   });
