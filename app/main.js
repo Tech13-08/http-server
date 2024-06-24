@@ -32,6 +32,20 @@ const server = net.createServer((socket) => {
                     content
                 );
                 break;
+              case "user-agent":
+                let userAgent =
+                  request[
+                    request.findIndex((element) =>
+                      element.includes("User-Agent")
+                    )
+                  ].split(": ")[1];
+                socket.write(
+                  "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:" +
+                    userAgent.length +
+                    "\r\n\r\n" +
+                    userAgent
+                );
+                break;
               default:
                 socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
             }
