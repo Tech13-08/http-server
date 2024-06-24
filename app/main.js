@@ -1,5 +1,7 @@
 const net = require("net");
 const fs = require("fs");
+const zlib = require("zlib");
+
 const dirIndex = process.argv.indexOf("--directory");
 let dirValue;
 
@@ -42,13 +44,21 @@ const server = net.createServer((socket) => {
           const validCompressions = acceptedCompressions.filter((element) =>
             compressionArray.includes(element)
           );
-          console.log(validCompressions);
           const compression =
             validCompressions.length > 0 ? validCompressions[0] : "";
           if (pathData[0].length > 0) {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
+                if (compression == "gzip") {
+                  zlib.gzip(content, (err, buffer) => {
+                    if (!err) {
+                      content = buffer;
+                    } else {
+                      console.log(err);
+                    }
+                  });
+                }
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
@@ -67,6 +77,15 @@ const server = net.createServer((socket) => {
                       element.includes("User-Agent")
                     )
                   ].split(": ")[1];
+                if (compression == "gzip") {
+                  zlib.gzip(userAgent, (err, buffer) => {
+                    if (!err) {
+                      userAgent = buffer;
+                    } else {
+                      console.log(err);
+                    }
+                  });
+                }
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
@@ -85,6 +104,15 @@ const server = net.createServer((socket) => {
                     "utf-8"
                   );
                   console.log(fileContent);
+                  if (compression == "gzip") {
+                    zlib.gzip(fileContent, (err, buffer) => {
+                      if (!err) {
+                        fileContent = buffer;
+                      } else {
+                        console.log(err);
+                      }
+                    });
+                  }
                   socket.write(
                     "HTTP/1.1 200 OK\r\n" +
                       (compression.length > 0
