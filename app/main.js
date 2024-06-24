@@ -51,7 +51,7 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  content = zlib.gzipSync(content).substring(8, -2);
+                  content = zlib.gzipSync(content).toString("hex");
                 }
                 console.log(content);
                 socket.write(
@@ -73,11 +73,7 @@ const server = net.createServer((socket) => {
                     )
                   ].split(": ")[1];
                 if (compression == "gzip") {
-                  userAgent = zlib
-                    .gzipSync(userAgent)
-                    .toString("hex")
-                    .toUpperCase()
-                    .replace(/(.{2})/g, "$1" + " ");
+                  userAgent = zlib.gzipSync(userAgent).toString("hex");
                 }
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
@@ -98,11 +94,7 @@ const server = net.createServer((socket) => {
                   );
                   console.log(fileContent);
                   if (compression == "gzip") {
-                    fileContent = zlib
-                      .gzipSync(fileContent)
-                      .toString("hex")
-                      .toUpperCase()
-                      .replace(/(.{2})/g, "$1" + " ");
+                    fileContent = zlib.gzipSync(fileContent).toString("hex");
                   }
                   socket.write(
                     "HTTP/1.1 200 OK\r\n" +
