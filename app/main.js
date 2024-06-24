@@ -86,12 +86,7 @@ const server = net.createServer((socket) => {
             switch (pathData[0]) {
               case "files":
                 if (!fs.existsSync(directory + pathData[1])) {
-                  const fileContent =
-                    request[
-                      request.findIndex((element) =>
-                        element.includes("Content-Type")
-                      ) + 3
-                    ];
+                  const fileContent = request[request.length - 1];
                   fs.writeFileSync(directory + pathData[1], fileContent);
                   socket.write("HTTP/1.1 201 Created\r\n\r\n");
                 } else {
