@@ -51,17 +51,18 @@ const server = net.createServer((socket) => {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
+                let content2 = "";
                 if (compression == "gzip") {
                   const gzip = zlib.createGzip();
 
-                  stream.pipeline(content, gzip, content, (err) => {
+                  stream.pipeline(content, gzip, content2, (err) => {
                     if (err) {
                       console.error("An error occurred:", err);
                       process.exitCode = 1;
                     }
                   });
                 }
-                console.log(content);
+                console.log(content2);
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
