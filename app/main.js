@@ -37,7 +37,7 @@ const server = net.createServer((socket) => {
           );
           const compressionArray =
             compressionIndex > -1
-              ? request[compressionIndex].split(": ")[1].split(",")
+              ? request[compressionIndex].split(": ")[1].split(", ")
               : [];
           const validCompressions = acceptedCompressions.filter((element) =>
             compressionArray.includes(element)
