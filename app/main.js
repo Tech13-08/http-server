@@ -55,7 +55,7 @@ const server = net.createServer((socket) => {
                     .gzipSync(content)
                     .toString("hex")
                     .toUpperCase()
-                    .replace(/(.{5})/g, "$1" + " ");
+                    .replace(/(.{2})/g, "$1" + " ");
                 }
                 console.log(content);
                 socket.write(
@@ -81,7 +81,7 @@ const server = net.createServer((socket) => {
                     .gzipSync(userAgent)
                     .toString("hex")
                     .toUpperCase()
-                    .replace(/(.{5})/g, "$1" + " ");
+                    .replace(/(.{2})/g, "$1" + " ");
                 }
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
@@ -106,7 +106,7 @@ const server = net.createServer((socket) => {
                       .gzipSync(fileContent)
                       .toString("hex")
                       .toUpperCase()
-                      .replace(/(.{5})/g, "$1" + " ");
+                      .replace(/(.{2})/g, "$1" + " ");
                   }
                   socket.write(
                     "HTTP/1.1 200 OK\r\n" +
