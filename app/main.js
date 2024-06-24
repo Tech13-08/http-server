@@ -39,7 +39,9 @@ const server = net.createServer((socket) => {
             compressionIndex > -1
               ? request[compressionIndex].split(": ")[1]
               : "";
-          compression = compression in acceptedCompressions ? compression : "";
+          compression = acceptedCompressions.includes(compression)
+            ? compression
+            : "";
           if (pathData[0].length > 0) {
             switch (pathData[0]) {
               case "echo":
