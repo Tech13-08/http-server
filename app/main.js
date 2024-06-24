@@ -1,6 +1,7 @@
 const net = require("net");
 const fs = require("fs");
 const zlib = require("zlib");
+const stream = require("stream");
 
 const dirIndex = process.argv.indexOf("--directory");
 let dirValue;
@@ -51,7 +52,14 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  content = zlib.gzipSync(content).toString("hex");
+                  const gzip = createGzip();
+
+                  pipeline(content, gzip, content, (err) => {
+                    if (err) {
+                      console.error("An error occurred:", err);
+                      process.exitCode = 1;
+                    }
+                  });
                 }
                 console.log(content);
                 socket.write(
