@@ -53,7 +53,7 @@ const server = net.createServer((socket) => {
                 if (compression == "gzip") {
                   zlib.gzip(content, (err, buffer) => {
                     if (!err) {
-                      content = buffer;
+                      content = buffer.toString("base64");
                     } else {
                       console.log(err);
                     }
@@ -80,7 +80,7 @@ const server = net.createServer((socket) => {
                 if (compression == "gzip") {
                   zlib.gzip(userAgent, (err, buffer) => {
                     if (!err) {
-                      userAgent = buffer;
+                      userAgent = buffer.toString("base64");
                     } else {
                       console.log(err);
                     }
@@ -107,7 +107,7 @@ const server = net.createServer((socket) => {
                   if (compression == "gzip") {
                     zlib.gzip(fileContent, (err, buffer) => {
                       if (!err) {
-                        fileContent = buffer;
+                        fileContent = buffer.toString("base64");
                       } else {
                         console.log(err);
                       }
