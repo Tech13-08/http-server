@@ -31,13 +31,15 @@ const server = net.createServer((socket) => {
 
       switch (dataString.substring(0, pathStartIndex - 1)) {
         case "GET":
+          const acceptedCompressions = ["gzip"];
           const compressionIndex = request.findIndex((element) =>
             element.startsWith("Accept-Encoding")
           );
-          const compression =
+          let compression =
             compressionIndex > -1
               ? request[compressionIndex].split(": ")[1]
               : "";
+          compression = compression in acceptedCompressions ? compression : "";
           if (pathData[0].length > 0) {
             switch (pathData[0]) {
               case "echo":
