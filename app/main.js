@@ -35,13 +35,15 @@ const server = net.createServer((socket) => {
           const compressionIndex = request.findIndex((element) =>
             element.startsWith("Accept-Encoding")
           );
-          let compression =
+          const compressionArray =
             compressionIndex > -1
-              ? request[compressionIndex].split(": ")[1]
-              : "";
-          compression = acceptedCompressions.includes(compression)
-            ? compression
-            : "";
+              ? request[compressionIndex].split(": ")[1].split(",")
+              : [];
+          const validCompressions = acceptedCompressions.filter((element) =>
+            compressionArray.includes(element)
+          );
+          const compression =
+            validCompressions.length > 0 ? validCompressions[0] : "";
           if (pathData[0].length > 0) {
             switch (pathData[0]) {
               case "echo":
