@@ -49,9 +49,9 @@ const server = net.createServer((socket) => {
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
-                      ? "Content-Encoding: " + compression
+                      ? "Content-Encoding: " + compression + "\r\n"
                       : "") +
-                    "\r\nContent-Type: text/plain\r\nContent-Length:" +
+                    "Content-Type: text/plain\r\nContent-Length:" +
                     content.length +
                     "\r\n\r\n" +
                     content
@@ -67,9 +67,9 @@ const server = net.createServer((socket) => {
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
-                      ? "Content-Encoding: " + compression
+                      ? "Content-Encoding: " + compression + "\r\n"
                       : "") +
-                    "\r\nContent-Type: text/plain\r\nContent-Length:" +
+                    "Content-Type: text/plain\r\nContent-Length:" +
                     userAgent.length +
                     "\r\n\r\n" +
                     userAgent
@@ -85,9 +85,9 @@ const server = net.createServer((socket) => {
                   socket.write(
                     "HTTP/1.1 200 OK\r\n" +
                       (compression.length > 0
-                        ? "Content-Encoding: " + compression
+                        ? "Content-Encoding: " + compression + "\r\n"
                         : "") +
-                      "\r\nContent-Type: application/octet-stream\r\nContent-Length:" +
+                      "Content-Type: application/octet-stream\r\nContent-Length:" +
                       fileContent.length +
                       "\r\n\r\n" +
                       fileContent
