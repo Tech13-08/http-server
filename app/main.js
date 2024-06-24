@@ -55,10 +55,11 @@ const server = net.createServer((socket) => {
                     if (!err) {
                       content = buffer.toString("base64");
                     } else {
-                      console.log(err);
+                      console.log("error: " + err);
                     }
                   });
                 }
+                console.log(content);
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
@@ -82,7 +83,7 @@ const server = net.createServer((socket) => {
                     if (!err) {
                       userAgent = buffer.toString("base64");
                     } else {
-                      console.log(err);
+                      console.log("error: " + err);
                     }
                   });
                 }
@@ -109,7 +110,7 @@ const server = net.createServer((socket) => {
                       if (!err) {
                         fileContent = buffer.toString("base64");
                       } else {
-                        console.log(err);
+                        console.log("error: " + err);
                       }
                     });
                   }
