@@ -51,9 +51,9 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  content = zlib.gzipSync(content);
+                  content = zlib.gzipSync(content).toString("hex");
                 }
-                console.log(content.toString("hex"));
+                console.log(content);
                 socket.write(
                   "HTTP/1.1 200 OK\r\n" +
                     (compression.length > 0
@@ -62,7 +62,7 @@ const server = net.createServer((socket) => {
                     "Content-Type: text/plain\r\nContent-Length:" +
                     content.length +
                     "\r\n\r\n" +
-                    content.toString("hex")
+                    content
                 );
                 break;
               case "user-agent":
