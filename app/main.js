@@ -50,8 +50,10 @@ const server = net.createServer((socket) => {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
+                let contentLength = content.length;
                 if (compression == "gzip") {
                   content = zlib.gzipSync(content);
+                  contentLength = Buffer.byteLength(content);
                 }
                 console.log(content);
                 socket.write(
@@ -60,7 +62,7 @@ const server = net.createServer((socket) => {
                       ? "Content-Encoding: " + compression + "\r\n"
                       : "") +
                     "Content-Type: text/plain\r\nContent-Length:" +
-                    content.length +
+                    contentLength +
                     "\r\n\r\n" +
                     content
                 );
