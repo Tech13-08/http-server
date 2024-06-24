@@ -52,9 +52,9 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  const gzip = createGzip();
+                  const gzip = zlib.createGzip();
 
-                  pipeline(content, gzip, content, (err) => {
+                  stream.pipeline(content, gzip, content, (err) => {
                     if (err) {
                       console.error("An error occurred:", err);
                       process.exitCode = 1;
