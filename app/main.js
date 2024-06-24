@@ -50,8 +50,8 @@ const server = net.createServer((socket) => {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
-                console.log(compression);
                 if (compression == "gzip") {
+                  console.log(compression);
                   zlib.gzip(content, (err, buffer) => {
                     if (!err) {
                       content = buffer.toString("hex");
