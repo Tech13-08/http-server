@@ -31,12 +31,19 @@ const server = net.createServer((socket) => {
 
       switch (dataString.substring(0, pathStartIndex - 1)) {
         case "GET":
+          const compressionIndex = request.findIndex("Accept-Encoding");
+          const compression =
+            compressionIndex > -1 ? request[compressionIndex] : "";
           if (pathData[0].length > 0) {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
                 socket.write(
-                  "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:" +
+                  "HTTP/1.1 200 OK\r\n" +
+                    (compression.length > 0
+                      ? "Content-Encoding: " + compression
+                      : "") +
+                    "\r\nContent-Type: text/plain\r\nContent-Length:" +
                     content.length +
                     "\r\n\r\n" +
                     content
@@ -50,7 +57,11 @@ const server = net.createServer((socket) => {
                     )
                   ].split(": ")[1];
                 socket.write(
-                  "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:" +
+                  "HTTP/1.1 200 OK\r\n" +
+                    (compression.length > 0
+                      ? "Content-Encoding: " + compression
+                      : "") +
+                    "\r\nContent-Type: text/plain\r\nContent-Length:" +
                     userAgent.length +
                     "\r\n\r\n" +
                     userAgent
@@ -64,7 +75,11 @@ const server = net.createServer((socket) => {
                   );
                   console.log(fileContent);
                   socket.write(
-                    "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" +
+                    "HTTP/1.1 200 OK\r\n" +
+                      (compression.length > 0
+                        ? "Content-Encoding: " + compression
+                        : "") +
+                      "\r\nContent-Type: application/octet-stream\r\nContent-Length:" +
                       fileContent.length +
                       "\r\n\r\n" +
                       fileContent
