@@ -51,7 +51,7 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  content = zlib.gzipSync(content);
+                  content = zlib.gzipSync(content).substring(8, -2);
                 }
                 console.log(content);
                 socket.write(
