@@ -64,7 +64,7 @@ const server = net.createServer((socket) => {
                     "Content-Type: text/plain\r\nContent-Length:" +
                     contentLength +
                     "\r\n\r\n" +
-                    content
+                    content.toString("hex")
                 );
                 break;
               case "user-agent":
