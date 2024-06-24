@@ -8,6 +8,9 @@ const server = net.createServer((socket) => {
 
   socket.on("data", (data) => {
     // Parse the request to find the path
+    let dataString = data.toString();
+    console.log(dataString);
+
     const pathStartIndex = dataString.indexOf("/");
     if (pathStartIndex !== -1) {
       const request = dataString.substring(pathStartIndex + 1).split("\r\n");
