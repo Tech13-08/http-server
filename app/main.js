@@ -21,7 +21,11 @@ const server = net.createServer((socket) => {
 
       switch (dataString.substring(0, pathStartIndex - 1)) {
         case "GET":
-          socket.write("HTTP/1.1 200 OK\r\n\r\n");
+          if (pathData[0].length > 0) {
+            socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
+          } else {
+            socket.write("HTTP/1.1 200 OK\r\n\r\n");
+          }
           break;
       }
     }
