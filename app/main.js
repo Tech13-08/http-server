@@ -1,12 +1,27 @@
 const net = require("net");
 
-// You can use print statements as follows for debugging, they'll be visible when running tests.
-console.log("Logs from your program will appear here!");
-
 // Uncomment this to pass the first stage
 const server = net.createServer((socket) => {
   socket.on("close", () => {
     socket.end();
+  });
+
+  socket.on("data", (data) => {
+    // Parse the request to find the path
+    const pathStartIndex = dataString.indexOf("/");
+    if (pathStartIndex !== -1) {
+      const request = dataString.substring(pathStartIndex + 1).split("\r\n");
+      const path = request[0].split(" ")[0]; // Extract the first line after '/'
+      const pathData = path.split("/");
+      console.log(request);
+      console.log(pathData);
+
+      switch (dataString.substring(0, pathStartIndex - 1)) {
+        case "GET":
+          socket.write("HTTP/1.1 200 OK\r\n\r\n");
+          break;
+      }
+    }
   });
 });
 
