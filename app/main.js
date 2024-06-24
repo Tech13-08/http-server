@@ -64,7 +64,7 @@ const server = net.createServer((socket) => {
                   );
                   console.log(fileContent);
                   socket.write(
-                    "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length:" +
+                    "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length:" +
                       fileContent.length +
                       "\r\n\r\n" +
                       fileContent
