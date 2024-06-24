@@ -31,7 +31,9 @@ const server = net.createServer((socket) => {
 
       switch (dataString.substring(0, pathStartIndex - 1)) {
         case "GET":
-          const compressionIndex = request.findIndex("Accept-Encoding");
+          const compressionIndex = request.findIndex((element) =>
+            element.startsWith("Accept-Encoding")
+          );
           const compression =
             compressionIndex > -1 ? request[compressionIndex] : "";
           if (pathData[0].length > 0) {
