@@ -51,11 +51,7 @@ const server = net.createServer((socket) => {
               case "echo":
                 let content = pathData[1];
                 if (compression == "gzip") {
-                  content = zlib
-                    .gzipSync(content)
-                    .toString("hex")
-                    .toUpperCase()
-                    .replace(/(.{2})/g, "$1" + " ");
+                  content = zlib.gzipSync(content);
                 }
                 console.log(content);
                 socket.write(
