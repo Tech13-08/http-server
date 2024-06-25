@@ -62,7 +62,7 @@ const server = net.createServer((socket) => {
                           "Content-Type: text/plain\r\nContent-Length:" +
                           buffer.length +
                           "\r\n\r\n" +
-                          buffer.toString("base64")
+                          buffer.toString("hex")
                       );
                     } else {
                       console.log(error);
