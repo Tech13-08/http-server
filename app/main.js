@@ -60,7 +60,7 @@ const server = net.createServer((socket) => {
                             ? "Content-Encoding: " + compression + "\r\n"
                             : "") +
                           "Content-Type: text/plain\r\nContent-Length:" +
-                          buffer.length +
+                          buffer.toString("hex").length +
                           "\r\n\r\n" +
                           buffer.toString("hex")
                       );
