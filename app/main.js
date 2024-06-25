@@ -52,20 +52,32 @@ const server = net.createServer((socket) => {
                 let content = pathData[1];
                 let contentLength = 0;
                 if (compression == "gzip") {
-                  content = Buffer.from(zlib.gzipSync(content), "base64");
-                  contentLength = Buffer.byteLength(content);
+                  zlib.gzip(content, (error, buffer) => {
+                    if (!error) {
+                      socket.write(
+                        "HTTP/1.1 200 OK\r\n" +
+                          (compression.length > 0
+                            ? "Content-Encoding: " + compression + "\r\n"
+                            : "") +
+                          "Content-Type: text/plain\r\nContent-Length:" +
+                          buffer.length +
+                          "\r\n\r\n" +
+                          buffer
+                      );
+                    } else {
+                      console.log(error);
+                    }
+                  });
+                } else {
+                  socket.write(
+                    "HTTP/1.1 200 OK\r\n" +
+                      "Content-Type: text/plain\r\nContent-Length:" +
+                      contentLength +
+                      "\r\n\r\n" +
+                      content
+                  );
                 }
                 console.log(content);
-                socket.write(
-                  "HTTP/1.1 200 OK\r\n" +
-                    (compression.length > 0
-                      ? "Content-Encoding: " + compression + "\r\n"
-                      : "") +
-                    "Content-Type: text/plain\r\nContent-Length:" +
-                    contentLength +
-                    "\r\n\r\n" +
-                    content
-                );
                 break;
               case "user-agent":
                 let userAgent =
