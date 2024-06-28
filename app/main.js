@@ -52,7 +52,7 @@ const server = net.createServer((socket) => {
                 let content = pathData[1];
                 let contentLength = 0;
                 if (compression == "gzip") {
-                  content = zlib.gzipSync(content).toString("hex");
+                  content = zlib.gzipSync(content);
                   contentLength = Buffer.byteLength(content);
                 }
                 console.log(content);
