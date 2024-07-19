@@ -77,18 +77,23 @@ const server = net.createServer((socket) => {
                     )
                   ].split(": ")[1];
                 if (compression == "gzip") {
-                  userAgent = zlib.gzipSync(userAgent);
+                  zlib.gzip(userAgent, (err, buffer) => {
+                    if (!err) {
+                      socket.write(
+                        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${buffer.length}\r\n\r\n`
+                      );
+                      socket.write(buffer);
+                    } else {
+                      socket.write(
+                        "HTTP/1.1 500 Internal Server Error\r\n\r\n"
+                      );
+                    }
+                  });
+                } else {
+                  socket.write(
+                    `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}`
+                  );
                 }
-                socket.write(
-                  "HTTP/1.1 200 OK\r\n" +
-                    (compression.length > 0
-                      ? "Content-Encoding: " + compression + "\r\n"
-                      : "") +
-                    "Content-Type: text/plain\r\nContent-Length:" +
-                    userAgent.length +
-                    "\r\n\r\n" +
-                    userAgent
-                );
                 break;
               case "files":
                 if (fs.existsSync(directory + pathData[1])) {
@@ -98,18 +103,23 @@ const server = net.createServer((socket) => {
                   );
                   console.log(fileContent);
                   if (compression == "gzip") {
-                    fileContent = zlib.gzipSync(fileContent);
+                    zlib.gzip(fileContent, (err, buffer) => {
+                      if (!err) {
+                        socket.write(
+                          `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${buffer.length}\r\n\r\n`
+                        );
+                        socket.write(buffer);
+                      } else {
+                        socket.write(
+                          "HTTP/1.1 500 Internal Server Error\r\n\r\n"
+                        );
+                      }
+                    });
+                  } else {
+                    socket.write(
+                      `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${fileContent.length}\r\n\r\n${fileContent}`
+                    );
                   }
-                  socket.write(
-                    "HTTP/1.1 200 OK\r\n" +
-                      (compression.length > 0
-                        ? "Content-Encoding: " + compression + "\r\n"
-                        : "") +
-                      "Content-Type: application/octet-stream\r\nContent-Length:" +
-                      fileContent.length +
-                      "\r\n\r\n" +
-                      fileContent
-                  );
                 } else {
                   socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
                 }
