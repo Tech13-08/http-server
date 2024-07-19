@@ -50,26 +50,24 @@ const server = net.createServer((socket) => {
             switch (pathData[0]) {
               case "echo":
                 let content = pathData[1];
-                let contentLength = 0;
                 if (compression == "gzip") {
                   zlib.gzip(content, (err, buffer) => {
                     if (!err) {
-                      content = buffer;
-                      contentLength = buffer.length;
+                      socket.write(
+                        `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: gzip\r\nContent-Length: ${buffer.length}\r\n\r\n`
+                      );
+                      socket.write(buffer);
+                    } else {
+                      socket.write(
+                        "HTTP/1.1 500 Internal Server Error\r\n\r\n"
+                      );
                     }
                   });
+                } else {
+                  socket.write(
+                    `HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${content.length}\r\n\r\n${content}`
+                  );
                 }
-                console.log(content);
-                socket.write(
-                  "HTTP/1.1 200 OK\r\n" +
-                    (compression.length > 0
-                      ? "Content-Encoding: " + compression + "\r\n"
-                      : "") +
-                    "Content-Type: text/plain\r\nContent-Length:" +
-                    contentLength +
-                    "\r\n\r\n" +
-                    content
-                );
                 break;
               case "user-agent":
                 let userAgent =
